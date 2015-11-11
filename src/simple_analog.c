@@ -11,7 +11,6 @@ static GBitmap *s_background_bitmap;
 static GPath *s_tick_paths[NUM_CLOCK_TICKS];
 static GPath *s_minute_arrow, *s_hour_arrow;
 static char s_num_buffer[4], s_day_buffer[6], s_battery_buffer[16];
-;
 
 static void battery_handler(BatteryChargeState charge_state) {
   
