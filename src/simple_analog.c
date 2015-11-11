@@ -28,11 +28,11 @@ static void hands_update_proc(Layer *layer, GContext *ctx) {
   };
 
   // second hand
-  graphics_context_set_stroke_color(ctx, GColorPurple);
+  graphics_context_set_stroke_color(ctx, GColorSunsetOrange);
   graphics_draw_line(ctx, second_hand, center);
 
   // minute/hour hand
-  graphics_context_set_fill_color(ctx, GColorIndigo);
+  graphics_context_set_fill_color(ctx, GColorCyan);
   graphics_context_set_stroke_color(ctx, GColorIndigo);
 
   gpath_rotate_to(s_minute_arrow, TRIG_MAX_ANGLE * t->tm_min / 60);

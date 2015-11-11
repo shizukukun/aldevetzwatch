@@ -18,7 +18,6 @@
     "sdkVersion": "3",
     "shortName": "AldevetzWatch",
     "targetPlatforms": [
-        "aplite",
         "basalt",
         "chalk"
     ],
