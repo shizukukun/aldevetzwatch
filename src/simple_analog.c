@@ -4,14 +4,20 @@
 
 static Window *s_window;
 static Layer *s_date_layer, *s_hands_layer;
-static TextLayer *s_day_label, *s_num_label;
-
+static TextLayer *s_day_label, *s_num_label, *battery_layer;
 static BitmapLayer *s_background_layer;
 static GBitmap *s_background_bitmap;
 
 static GPath *s_tick_paths[NUM_CLOCK_TICKS];
 static GPath *s_minute_arrow, *s_hour_arrow;
-static char s_num_buffer[4], s_day_buffer[6];
+static char s_num_buffer[4], s_day_buffer[6], s_battery_buffer[16];
+;
+
+static void battery_handler(BatteryChargeState charge_state) {
+  
+  snprintf(s_battery_buffer, sizeof(s_battery_buffer), "%d%%", charge_state.charge_percent);
+  text_layer_set_text(battery_layer, s_battery_buffer);
+}
 
 static void hands_update_proc(Layer *layer, GContext *ctx) {
   GRect bounds = layer_get_bounds(layer);
@@ -64,6 +70,8 @@ static void handle_second_tick(struct tm *tick_time, TimeUnits units_changed) {
 }
 
 static void window_load(Window *window) {
+  
+  
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
   
@@ -77,28 +85,43 @@ static void window_load(Window *window) {
   layer_add_child(window_layer, s_date_layer);
   
   s_day_label = text_layer_create(PBL_IF_ROUND_ELSE(
-    GRect(63, 114, 27, 20),
-    GRect(46, 114, 27, 20)));
+    GRect(20, 114, 30, 20),
+    GRect(12, 114, 30, 20)));
   text_layer_set_text(s_day_label, s_day_buffer);
-  text_layer_set_background_color(s_day_label, GColorWhite);
-  text_layer_set_text_color(s_day_label, GColorFolly);
-  text_layer_set_font(s_day_label, fonts_get_system_font(FONT_KEY_GOTHIC_18));
+  text_layer_set_background_color(s_day_label, GColorClear);
+  text_layer_set_text_color(s_day_label, GColorMidnightGreen);
+  text_layer_set_font(s_day_label, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
 
   layer_add_child(s_date_layer, text_layer_get_layer(s_day_label));
 
   s_num_label = text_layer_create(PBL_IF_ROUND_ELSE(
-    GRect(90, 114, 18, 20),
-    GRect(73, 114, 18, 20)));
+    GRect(138, 114, 18, 20),
+    GRect(114, 114, 18, 20)));
   text_layer_set_text(s_num_label, s_num_buffer);
-  text_layer_set_background_color(s_num_label, GColorWhite);
+  text_layer_set_background_color(s_num_label, GColorClear);
   text_layer_set_text_color(s_num_label, GColorBulgarianRose);
   text_layer_set_font(s_num_label, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
 
   layer_add_child(s_date_layer, text_layer_get_layer(s_num_label));
+  
+  battery_layer = text_layer_create(PBL_IF_ROUND_ELSE(
+    GRect(78, 158, 30, 20),
+    GRect(62, 148, 30, 20)));
+  BatteryChargeState charge_state = battery_state_service_peek();
+  snprintf(s_battery_buffer, sizeof(s_battery_buffer), "%d%%", charge_state.charge_percent);
+  text_layer_set_text(battery_layer, s_battery_buffer);
+  text_layer_set_background_color(battery_layer, GColorClear);
+  text_layer_set_text_color(battery_layer, GColorDarkCandyAppleRed);
+  text_layer_set_font(battery_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
 
+  layer_add_child(window_layer, text_layer_get_layer(battery_layer));
+  
   s_hands_layer = layer_create(bounds);
   layer_set_update_proc(s_hands_layer, hands_update_proc);
   layer_add_child(window_layer, s_hands_layer);
+  
+  battery_state_service_subscribe(battery_handler);
+
 }
 
 
@@ -108,8 +131,11 @@ static void window_unload(Window *window) {
 
   text_layer_destroy(s_day_label);
   text_layer_destroy(s_num_label);
+  text_layer_destroy(battery_layer);
 
   layer_destroy(s_hands_layer);
+  
+  battery_state_service_unsubscribe();
 }
 
 static void init() {
