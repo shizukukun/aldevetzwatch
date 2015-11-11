@@ -3,7 +3,7 @@
 #include "pebble.h"
 
 static Window *s_window;
-static Layer *s_simple_bg_layer, *s_date_layer, *s_hands_layer;
+static Layer *s_date_layer, *s_hands_layer;
 static TextLayer *s_day_label, *s_num_label;
 
 static BitmapLayer *s_background_layer;
@@ -80,8 +80,8 @@ static void window_load(Window *window) {
     GRect(63, 114, 27, 20),
     GRect(46, 114, 27, 20)));
   text_layer_set_text(s_day_label, s_day_buffer);
-  text_layer_set_background_color(s_day_label, GColorBlack);
-  text_layer_set_text_color(s_day_label, GColorWhite);
+  text_layer_set_background_color(s_day_label, GColorWhite);
+  text_layer_set_text_color(s_day_label, GColorFolly);
   text_layer_set_font(s_day_label, fonts_get_system_font(FONT_KEY_GOTHIC_18));
 
   layer_add_child(s_date_layer, text_layer_get_layer(s_day_label));
@@ -90,8 +90,8 @@ static void window_load(Window *window) {
     GRect(90, 114, 18, 20),
     GRect(73, 114, 18, 20)));
   text_layer_set_text(s_num_label, s_num_buffer);
-  text_layer_set_background_color(s_num_label, GColorBlack);
-  text_layer_set_text_color(s_num_label, GColorWhite);
+  text_layer_set_background_color(s_num_label, GColorWhite);
+  text_layer_set_text_color(s_num_label, GColorBulgarianRose);
   text_layer_set_font(s_num_label, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD));
 
   layer_add_child(s_date_layer, text_layer_get_layer(s_num_label));
@@ -103,7 +103,7 @@ static void window_load(Window *window) {
 
 
 static void window_unload(Window *window) {
-  layer_destroy(s_simple_bg_layer);
+  bitmap_layer_destroy(s_background_layer);
   layer_destroy(s_date_layer);
 
   text_layer_destroy(s_day_label);
