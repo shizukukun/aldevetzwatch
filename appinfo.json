@@ -1,0 +1,30 @@
+{
+    "appKeys": {},
+    "capabilities": [
+        ""
+    ],
+    "companyName": "shizuku kun",
+    "longName": "Watchface of J-Rock Band Aldevetz",
+    "projectType": "native",
+    "resources": {
+        "media": [
+            {
+                "file": "images/background.png",
+                "name": "IMAGE_BACKGROUND",
+                "type": "png-trans"
+            }
+        ]
+    },
+    "sdkVersion": "3",
+    "shortName": "AldevetzWatch",
+    "targetPlatforms": [
+        "aplite",
+        "basalt",
+        "chalk"
+    ],
+    "uuid": "ecc8f112-318f-4ee2-be11-53c63b8a1139",
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": true
+    }
+}
