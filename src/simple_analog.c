@@ -104,8 +104,8 @@ static void window_load(Window *window) {
   layer_add_child(s_date_layer, text_layer_get_layer(s_num_label));
   
   battery_layer = text_layer_create(PBL_IF_ROUND_ELSE(
-    GRect(78, 158, 30, 20),
-    GRect(62, 148, 30, 20)));
+    GRect(75, 158, 40, 20),
+    GRect(62, 148, 40, 20)));
   BatteryChargeState charge_state = battery_state_service_peek();
   snprintf(s_battery_buffer, sizeof(s_battery_buffer), "%d%%", charge_state.charge_percent);
   text_layer_set_text(battery_layer, s_battery_buffer);
